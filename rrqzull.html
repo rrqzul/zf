@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Grafik PTUN - Pengadilan Tata Usaha Negara</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0077b6, #00b4d8);
+      color: white;
+      max-width: 350px;
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-sizing: border-box;
+    }
+    header {
+      margin-bottom: 20px;
+      text-align: center;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    }
+    header h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    header p {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #caf0f8;
+    }
+    section {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 15px;
+      box-shadow: 0 6px 20px rgb(0 0 0 / 0.3);
+      padding: 15px 20px;
+      margin-bottom: 25px;
+      width: 100%;
+      max-height: 270px; /* to fit total height under 600px */
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    section h2 {
+      margin-bottom: 12px;
+      font-size: 1.2rem;
+      border-bottom: 2px solid #90e0ef;
+      padding-bottom: 6px;
+    }
+    canvas {
+      width: 100% !important;
+      height: 180px !important;
+      max-height: 180px;
+    }
+    footer {
+      text-align: center;
+      font-size: 0.8rem;
+      color: #caf0f8;
+      margin-top: auto;
+      user-select: none;
+    }
+    @media (max-width: 350px) {
+      body {
+        padding: 15px 10px;
+      }
+      header h1 {
+        font-size: 1.4rem;
+      }
+      section h2 {
+        font-size: 1.1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>GRAFIK PTUN</h1>
+    <p>Data Statistik Pengadilan Tata Usaha Negara</p>
+  </header>
+
+  <section>
+    <h2>Jumlah Perkara PTUN per Tahun</h2>
+    <canvas id="barChart"></canvas>
+  </section>
+  <section>
+    <h2>Distribusi Kategori Perkara</h2>
+    <canvas id="pieChart"></canvas>
+  </section>
+
+  <footer>
+    &copy; 2024 Pengadilan Tata Usaha Negara
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const ctxBar = document.getElementById('barChart').getContext('2d');
+    const ctxPie = document.getElementById('pieChart').getContext('2d');
+
+    // Sample data for cases per year
+    const dataPerYear = {
+      labels: ['2019', '2020', '2021', '2022', '2023','2024','2025'],
+      datasets: [{
+        label: 'Jumlah Perkara',
+        data: [120, 140, 160, 180, 210,230,250],
+        backgroundColor: 'rgba(0, 119, 182, 0.7)',
+        borderColor: '#0077b6',
+        borderWidth: 1,
+        borderRadius: 6,
+      }]
+    };
+
+    // Bar chart configuration
+    const barChart = new Chart(ctxBar, {
+      type: 'bar',
+      data: dataPerYear,
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              color: '#caf0f8',
+              stepSize: 20,
+              font: {
+                size: 12
+              }
+            },
+            grid: {
+              color: 'rgba(255,255,255,0.2)'
+            }
+          },
+          x: {
+            ticks: {
+              color: '#caf0f8',
+              font: {
+                size: 12
+              }
+            },
+            grid: {
+              display: false
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            labels: {
+              color: '#caf0f8'
+            }
+          },
+          tooltip: {
+            backgroundColor: '#023e8a',
+            bodyColor: '#caf0f8',
+            titleColor: '#90e0ef',
+            cornerRadius: 6
+          }
+        }
+      }
+    });
+
+    // Sample data for case categories distribution
+    const dataCategories = {
+      labels: [
+        'Keputusan Tata Usaha',
+        'Sengketa Perizinan',
+        'Sengketa Kepegawaian',
+        'Sengketa Pajak',
+        'Pengujian Surat Keputusan',
+        'Sengketa Pengadaan',
+        'Sengketa Persuratan',
+        'Sengketa APA AJA'
+        
+      ],
+      datasets: [{
+        label: 'Distribusi Perkara',
+        data: [25, 20, 15, 18, 12, 10,22,33],
+        backgroundColor: [
+          '#0077b6',
+          '#00b4d8',
+          '#90e0ef',
+          '#caf0f8',
+          '#023e8a',
+          '#48cae4',
+          '#48cae4',
+          '#caf0f8'
+        ],
+        borderWidth: 1,
+        borderColor: 'rgba(255,255,255,0.6)'
+      }]
+    };
+
+    // Pie chart configuration
+    const pieChart = new Chart(ctxPie, {
+      type: 'pie',
+      data: dataCategories,
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              color: '#caf0f8',
+              font: {
+                size: 12
+              }
+            }
+          },
+          tooltip: {
+            backgroundColor: '#023e8a',
+            bodyColor: '#caf0f8',
+            titleColor: '#90e0ef',
+            cornerRadius: 8
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
+</content>
+</create_file>
